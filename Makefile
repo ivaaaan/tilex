@@ -5,6 +5,3 @@ compile:
 
 format:
 	clang-format -i -style=WebKit *.c
-
-clean:
-	rm ./xtile
