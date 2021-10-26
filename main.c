@@ -18,8 +18,8 @@ Window GetActiveWindow(Display* d)
     unsigned int num_children;
 
     XGetInputFocus(d, &window, &revert_to);
-
     XQueryTree(d, window, &root, &parent, &children, &num_children);
+
     return parent;
 }
 
@@ -64,8 +64,8 @@ void TileCenter(struct Context context)
 
     int x = (context.displayWidth / 2) - (attributes.width / 2);
     int y = (context.displayHeight / 2) - (attributes.height / 2);
-    XMoveWindow(context.display, context.window, x, y - 20);
 
+    XMoveWindow(context.display, context.window, x, y);
     XSync(context.display, False);
 }
 
