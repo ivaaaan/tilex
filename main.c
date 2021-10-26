@@ -90,5 +90,7 @@ int main(int argc, char* argv[])
         TileCenter(context);
     }
 
+    XCloseDisplay(display);
+
     return 0;
 }
