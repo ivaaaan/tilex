@@ -9,6 +9,8 @@ struct Context {
 
     int displayWidth;
     int displayHeight;
+    int marginX;
+    int marginY;
 };
 
 Window GetActiveWindow(Display* d)
@@ -23,7 +25,7 @@ Window GetActiveWindow(Display* d)
     return parent;
 }
 
-struct Context CreateContext(Display* display)
+struct Context CreateContext(Display* display, int argc, char* argv[])
 {
     struct Context context;
     int screenNumber;
@@ -34,6 +36,17 @@ struct Context CreateContext(Display* display)
     context.displayWidth = DisplayWidth(display, screenNumber);
     context.displayHeight = DisplayHeight(display, screenNumber);
     context.window = GetActiveWindow(display);
+    if(argc > 2) {
+        context.marginX = atoi(argv[2]);
+    } else {
+        context.marginX = 0;
+    }
+
+    if(argc > 3) {
+        context.marginY = atoi(argv[3]);
+    } else {
+        context.marginY = 0;
+    }
 
     return context;
 }
@@ -62,8 +75,8 @@ void TileCenter(struct Context context)
     XWindowAttributes attributes;
     XGetWindowAttributes(context.display, context.window, &attributes);
 
-    int x = (context.displayWidth / 2) - (attributes.width / 2);
-    int y = (context.displayHeight / 2) - (attributes.height / 2);
+    int x = (context.displayWidth / 2) - (attributes.width / 2) + (context.marginX);
+    int y = ((context.displayHeight / 2) - (attributes.height / 2)) - (context.marginY);
 
     XMoveWindow(context.display, context.window, x, y);
     XSync(context.display, False);
@@ -80,7 +93,7 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    context = CreateContext(display);
+    context = CreateContext(display, argc, argv);
 
     if (strcmp(argv[1], "left") == 0) {
         TileLeft(context);
